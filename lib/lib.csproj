@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageOutputPath>$(NUGET_HOME)</PackageOutputPath>
+		<IsPackable>true</IsPackable>
+		<AssemblyName>No1.asp.NET.Security</AssemblyName>
+		<RootNamespace>No1.asp.NET.Security</RootNamespace>
+		<Title>No1.asp.NET.Security</Title>
+		<Description>Provides tools and classes to protect asp.net applications' endpoints with expression</Description>
+		<PackageProjectUrl>https://github.com/behzadian/No1.asp.NET.Security</PackageProjectUrl>
+		<PackageId>No1.asp.NET.Security</PackageId>
+		<Authors>Hank Benz</Authors>
+		<Company>No1</Company>
+		<Product>No1.asp.NET.Security</Product>
+		<Version>1.0.0</Version>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>git@github.com:behzadian/No1.asp.NET.Security.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<NoWarn>CS1591,SA1600,SA1200,SA1601,SA1633,SA1500,RCS1194,SA1300</NoWarn>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<!-- Microsoft Code Analysis -->
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<!-- StyleCop Analyzers -->
+		<PackageReference Include="StyleCop.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<!-- Roslynator -->
+		<PackageReference Include="Roslynator.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<!-- SonarAnalyzer -->
+		<PackageReference Include="SonarAnalyzer.CSharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions"/>
+		<PackageReference Include="No1.Commons"/>
+	</ItemGroup>
+
+	<!-- Git hooks: skip in CI/Docker (no .git / not wanted in images). Local dev: run restore from repo root so dotnet-tools.json is found. -->
+	<Target Name="InstallHusky" AfterTargets="Restore" Condition="'$(HUSKY)' != '0' AND '$(CI)' != 'true'">
+		<Exec Command="dotnet tool restore" StandardOutputImportance="Low" />
+		<Exec Command="dotnet husky install" StandardOutputImportance="Low" />
+	</Target>
+</Project>
